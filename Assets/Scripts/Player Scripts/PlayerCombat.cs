@@ -5,5 +5,5 @@ using UnityEngine;
 [AddComponentMenu("Player Movement / Combat Manager")]
 public class PlayerCombat : MonoBehaviour
 {
-
+    
 }

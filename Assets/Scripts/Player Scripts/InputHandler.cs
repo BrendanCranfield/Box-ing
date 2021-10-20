@@ -24,21 +24,25 @@ public class InputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        if(playerControls == null && platformExample != null)
+        if(playerControls == null)
         {
             playerControls = new PlayerController();
+            
             playerControls.PlayerMovement.Movement.performed += inputContext =>
             {
-                moveInput = inputContext.ReadValue<Vector2>();
+                if(platformExample != null)
+                {
+                    moveInput = inputContext.ReadValue<Vector2>();
 
-                platformExample.horizontal = moveInput.x;
-                platformExample.vertical = moveInput.y;
-                platformExample.moveDirection = moveInput;
+                    platformExample.horizontal = moveInput.x;
+                    platformExample.vertical = moveInput.y;
+                    platformExample.moveDirection = moveInput;
 
-                if (moveInput.y > 0.5f)
-                    platformExample.isJumping = true;
-                else
-                    platformExample.isJumping = false;
+                    if (moveInput.y > 0.5f)
+                        platformExample.isJumping = true;
+                    else
+                        platformExample.isJumping = false;
+                }
             };
         }
 

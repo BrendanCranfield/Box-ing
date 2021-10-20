@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), (typeof(Collider2D)))]
 [AddComponentMenu("Player Movement / Platform Example")]
 public class PlatformerScript : MonoBehaviour
 {
@@ -114,6 +114,11 @@ public class PlatformerScript : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
+    }
+
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 
     #endregion
