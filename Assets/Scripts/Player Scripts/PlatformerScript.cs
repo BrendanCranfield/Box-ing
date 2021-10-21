@@ -12,8 +12,7 @@ public class PlatformerScript : MonoBehaviour
     private new Rigidbody2D rigidbody;
 
     [Header("Grounded Detection")]
-    [SerializeField]
-    bool isGrounded = true;
+    public bool isGrounded = true;
     LayerMask ignoreLayers;
     [SerializeField]
     Transform groundCheck;
@@ -26,7 +25,7 @@ public class PlatformerScript : MonoBehaviour
     [HideInInspector]
     public bool isJumping;
     [SerializeField]
-    float fallingSpeed = 45f, jumpForce = 400f;
+    float fallingSpeed = 45f, jumpForce = 400f, movementSpeed = 5f;
     [Range(0, .3f)]
     [SerializeField]
     float movementSmoothing = 0.05f;
@@ -60,7 +59,7 @@ public class PlatformerScript : MonoBehaviour
     {
         if (isGrounded || inAirControl)
         {
-            Vector3 targetVelocity = new Vector3(horizontal * 10f, rigidbody.velocity.y);
+            Vector3 targetVelocity = new Vector3(horizontal * movementSpeed, rigidbody.velocity.y);
             rigidbody.velocity = Vector3.SmoothDamp(rigidbody.velocity, targetVelocity, ref velocity, movementSmoothing);
 
             if (horizontal > 0 && !facingRight)
