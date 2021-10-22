@@ -6,22 +6,23 @@ using UnityEngine;
 public class PowerupDetector : MonoBehaviour
 {
     CircleCollider2D circleCollider;
-    public WeaponItemManager weaponItemManager;
+    PowerupManager powerupManager;
 
-    public WeaponItems weapon;
+    [SerializeField] bool isRangedWeapon;
 
     void Start()
     {
         circleCollider = GetComponent<CircleCollider2D>();
         circleCollider.isTrigger = true;
-        weapon = weaponItemManager.weaponItemsList[Random.Range(0, weaponItemManager.weaponItemsList.Count)];
+        powerupManager = PowerupManager.powerupManager;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerManager>().weaponItem = weapon;
+            //GameObject createdWeapon = Instantiate(powerupManager.ChooseRandomWeapon(isRangedWeapon).weaponObject);
+
             Destroy(gameObject);
         }
     }

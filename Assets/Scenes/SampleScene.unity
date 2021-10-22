@@ -157,7 +157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68e64f6179ce164bbf2a4b8b18c06dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentWeapon: 0
   weaponItem: {fileID: 11400000, guid: bfde0feafffcf60449eef06b6ba00fa5, type: 2}
 --- !u!114 &208754090
 MonoBehaviour:
@@ -580,8 +579,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64fa3cc4cf3aedf4a99c2aef82c3d48e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponItemManager: {fileID: 2061757579}
-  weapon: {fileID: 0}
+  isRangedWeapon: 0
 --- !u!212 &817335712
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -891,12 +889,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 2061757578}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76607c6165f853b4fb49486447a8612f, type: 3}
+  m_Script: {fileID: 11500000, guid: 02873f2c8237f26458501b9ba1d77611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponItemsList:
-  - {fileID: 11400000, guid: bfde0feafffcf60449eef06b6ba00fa5, type: 2}
-  - {fileID: 11400000, guid: b2f6294dd8be66b4487282888ed27008, type: 2}
+  weapons:
+  - itemName: 0
+    dropChance: 2.6
+    weaponObject: {fileID: 0}
+    weaponType: 1
+  - itemName: 1
+    dropChance: 90.1
+    weaponObject: {fileID: 0}
+    weaponType: 1
+  - itemName: 2
+    dropChance: 84.5
+    weaponObject: {fileID: 0}
+    weaponType: 0
+  - itemName: 3
+    dropChance: 0.7
+    weaponObject: {fileID: 0}
+    weaponType: 1
+  - itemName: 4
+    dropChance: 2
+    weaponObject: {fileID: 0}
+    weaponType: 0
+  powerups: []
 --- !u!4 &2061757580
 Transform:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class InputHandler : MonoBehaviour
     PlayerController playerControls;
 
     PlatformerScript platformExample;
-    [HideInInspector]
+    //[HideInInspector]
     public Vector3 moveInput;
 
     private void Start()
@@ -28,7 +28,7 @@ public class InputHandler : MonoBehaviour
         if(playerControls == null)
         {
             playerControls = new PlayerController();
-            
+
             playerControls.PlayerMovement.Movement.performed += inputContext =>
             {
                 if(platformExample != null)

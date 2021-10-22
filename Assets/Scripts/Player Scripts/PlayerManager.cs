@@ -5,13 +5,14 @@ using UnityEngine;
 [AddComponentMenu("Player Movement / Player Manager")]
 public class PlayerManager : MonoBehaviour
 {
-    public WeaponItems.WeaponType currentWeapon;
-
     //[HideInInspector]
-    public WeaponItems weaponItem;
+    public GameObject weaponItem;
 
     public void HandleAttacking()
     {
+        //weaponItem.GetComponent<>()   //Get weapon enum from script and constructor
+
+        /*
         if (weaponItem != null)
         {
             switch (currentWeapon)
@@ -29,5 +30,6 @@ public class PlayerManager : MonoBehaviour
         {
 
         }
+        */
     }
 }

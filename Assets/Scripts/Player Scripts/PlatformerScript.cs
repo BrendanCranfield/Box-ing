@@ -77,8 +77,8 @@ public class PlatformerScript : MonoBehaviour
     {
         if (isGrounded && isJumping)
         {
-            isGrounded = false;
             rigidbody.AddForce(new Vector2(0f, jumpForce));
+            isGrounded = false;
             isJumping = false;
         }
     }
