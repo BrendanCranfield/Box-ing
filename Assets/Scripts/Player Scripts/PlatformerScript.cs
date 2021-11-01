@@ -13,6 +13,7 @@ public class PlatformerScript : MonoBehaviour
 
     [Header("Grounded Detection")]
     public bool isGrounded = true;
+    [SerializeField]
     LayerMask ignoreLayers;
     [SerializeField]
     Transform groundCheck;
@@ -42,8 +43,6 @@ public class PlatformerScript : MonoBehaviour
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody2D>();
-
-        ignoreLayers = ~(1 << 8 | 1 << 11);
     }
 
     void FixedUpdate()
@@ -115,7 +114,7 @@ public class PlatformerScript : MonoBehaviour
         transform.localScale = theScale;
     }
 
-    private void OnBecameInvisible()
+    private void OnBecameInvisible()    //Method to destroy object if not in view of camera. Will be changed later.
     {
         Destroy(gameObject);
     }

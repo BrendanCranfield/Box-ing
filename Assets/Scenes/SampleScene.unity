@@ -171,10 +171,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 1
+  ignoreLayers:
+    serializedVersion: 2
+    m_Bits: 8
   groundCheck: {fileID: 407818824}
   isJumping: 0
-  fallingSpeed: 45
-  jumpForce: 400
+  fallingSpeed: 15
+  jumpForce: 600
   movementSpeed: 10
   movementSmoothing: 0.05
   inAirControl: 1
@@ -356,7 +359,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4
   m_IsActive: 1
 --- !u!61 &472162421
 BoxCollider2D:
@@ -544,7 +547,7 @@ GameObject:
   - component: {fileID: 817335712}
   - component: {fileID: 817335711}
   - component: {fileID: 817335710}
-  m_Layer: 0
+  m_Layer: 31
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -561,7 +564,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -661,7 +664,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4
   m_IsActive: 1
 --- !u!61 &1283904610
 BoxCollider2D:
@@ -770,7 +773,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4
   m_IsActive: 1
 --- !u!61 &1677065059
 BoxCollider2D:
@@ -893,23 +896,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapons:
-  - itemName: 0
+  - itemName: Ranged 0
     dropChance: 2.6
     weaponObject: {fileID: 0}
     weaponType: 1
-  - itemName: 1
+  - itemName: Ranged 1
     dropChance: 90.1
     weaponObject: {fileID: 0}
     weaponType: 1
-  - itemName: 2
+  - itemName: Melee 2
     dropChance: 84.5
     weaponObject: {fileID: 0}
     weaponType: 0
-  - itemName: 3
+  - itemName: Ranged 3
     dropChance: 0.7
     weaponObject: {fileID: 0}
     weaponType: 1
-  - itemName: 4
+  - itemName: Melee 4
     dropChance: 2
     weaponObject: {fileID: 0}
     weaponType: 0

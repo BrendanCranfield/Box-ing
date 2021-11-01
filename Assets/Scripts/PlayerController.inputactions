@@ -16,8 +16,8 @@
             ],
             "bindings": [
                 {
-                    "name": "PC",
-                    "id": "1dcc02fb-c21d-46dd-8172-792785c32beb",
+                    "name": "PC - WASD",
+                    "id": "b896f740-bb3f-43fb-aef2-7468127ca78e",
                     "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
@@ -25,6 +25,50 @@
                     "action": "Movement",
                     "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "0e7e6c80-c8a7-4141-88f1-76e4d942e166",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "6127c26c-2b0a-4f55-9288-aad01da69105",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "a4e8692d-109a-4104-89c6-813d0ef16dd8",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "b59013fd-c0ce-45e4-b28d-32764eb4db0a",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Movement",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "PC - Arrow Keys",
@@ -74,17 +118,6 @@
                     "name": "right",
                     "id": "34791a41-1233-407b-9e1f-dca0856bc969",
                     "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "PC",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "up",
-                    "id": "3298ed8a-a007-490b-a056-6d88cc3d4a84",
-                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
