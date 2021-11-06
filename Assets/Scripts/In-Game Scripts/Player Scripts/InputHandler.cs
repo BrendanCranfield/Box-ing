@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [AddComponentMenu("Player Movement / Input Handler")]
 public class InputHandler : MonoBehaviour
@@ -26,28 +27,26 @@ public class InputHandler : MonoBehaviour
     private void OnEnable()
     {
         if(playerControls == null)
-        {
             playerControls = new PlayerController();
 
-            playerControls.PlayerMovement.Movement.performed += inputContext =>
-            {
-                if(platformExample != null)
-                {
-                    moveInput = inputContext.ReadValue<Vector2>();
-
-                    platformExample.horizontal = moveInput.x;
-                    platformExample.vertical = moveInput.y;
-                    platformExample.moveDirection = moveInput;
-
-                    if (moveInput.y > 0.5f)
-                        platformExample.isJumping = true;
-                    else
-                        platformExample.isJumping = false;
-                }
-            };
-        }
-
         playerControls.Enable();
+    }
+
+    public void OnPlayerMovement(InputAction.CallbackContext inputContext)
+    {
+        if (platformExample != null)
+        {
+            moveInput = inputContext.ReadValue<Vector2>();
+
+            platformExample.horizontal = moveInput.x;
+            platformExample.vertical = moveInput.y;
+            platformExample.moveDirection = moveInput;
+
+            if (moveInput.y > 0.5f)
+                platformExample.isJumping = true;
+            else
+                platformExample.isJumping = false;
+        }
     }
 
     private void OnDisable()

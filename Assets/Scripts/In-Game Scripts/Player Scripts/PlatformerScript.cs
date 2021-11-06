@@ -21,8 +21,12 @@ public class PlatformerScript : MonoBehaviour
     const float GroundedRadius = .2f;
     bool facingRight = true;
     private Vector3 velocity = Vector3.zero;
+    int jumpAmount;
+
 
     [Header("Movement Stats")]
+    [SerializeField]
+    int totalJumpAmount = 2;
     [HideInInspector]
     public bool isJumping;
     [SerializeField]
@@ -74,12 +78,15 @@ public class PlatformerScript : MonoBehaviour
 
     private void HandleJumping()
     {
-        if (isGrounded && isJumping)
+        if (isJumping && jumpAmount != totalJumpAmount)
         {
             rigidbody.AddForce(new Vector2(0f, jumpForce));
             isGrounded = false;
             isJumping = false;
+            jumpAmount += 1;
         }
+        else if (isGrounded && !isJumping)
+            jumpAmount = 0;
     }
 
     private void HandleFallingAndGrounded()
@@ -112,11 +119,6 @@ public class PlatformerScript : MonoBehaviour
         Vector3 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
-    }
-
-    private void OnBecameInvisible()    //Method to destroy object if not in view of camera. Will be changed later.
-    {
-        Destroy(gameObject);
     }
 
     #endregion
