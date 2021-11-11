@@ -19,6 +19,9 @@ public class PlayerManager : MonoBehaviour
     bool canBeAttacked;
     SpriteRenderer sprite;
 
+    //[HideInInspector]
+    public bool isDashing, isJumping, lightAttack, heavyAttack;
+
     private void Start()
     {
         MultiplayerManager.multiplayer.AddToUsers(GetComponent<PlayerInput>());
@@ -44,14 +47,13 @@ public class PlayerManager : MonoBehaviour
         //If player dies
         playerLives -= 1;
 
-        if (playerLives > 0)
+        if (playerLives > 0 && gameObject.activeInHierarchy)
         {
             transform.position = new Vector3(Random.Range(-7, 7), 4, 0);
             canBeAttacked = false;
             StartCoroutine(GracePeriod(gracePeriodAmount));
         }
-        else
-            gameObject.SetActive(false);
+        else { gameObject.SetActive(false); }
     }
 
     IEnumerator GracePeriod(float gracePeriodTime)
@@ -66,8 +68,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnBecameInvisible()
     {
-        if(canBeAttacked)
-            healthSystem.Damage(10000);
+        if(canBeAttacked) healthSystem.Damage(10000);
         else
         {
             Vector3 minScreenBounds = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));

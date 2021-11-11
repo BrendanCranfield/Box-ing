@@ -20,6 +20,6 @@ public class MultiplayerManager : MonoBehaviour
     {
         player.name = $"Player {users.Count + 1}";
         users.Add(player);
-        if (UserAdded != null) UserAdded(this, EventArgs.Empty);
+        if (UserAdded != null) { UserAdded(this, EventArgs.Empty); }
     }
 }

@@ -29,8 +29,7 @@ public class PlatformerScript : MonoBehaviour
     int totalJumpAmount = 2;
     [HideInInspector]
     public bool isJumping;
-    [SerializeField]
-    float fallingSpeed = 45f, jumpForce = 400f, movementSpeed = 5f;
+    public float fallingSpeed = 45f, jumpForce = 400f, movementSpeed = 5f;
     [Range(0, .3f)]
     [SerializeField]
     float movementSmoothing = 0.05f;

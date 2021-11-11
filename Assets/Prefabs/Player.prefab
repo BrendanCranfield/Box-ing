@@ -195,7 +195,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68e64f6179ce164bbf2a4b8b18c06dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponItem: {fileID: 0}
+  playerLives: 3
+  gracePeriodAmount: 5
+  weaponItem:
+    itemName: 
+    dropChance: 0
+    weaponObject: {fileID: 0}
+    weaponType: 0
+  isDashing: 0
+  isJumping: 0
+  lightAttack: 0
+  heavyAttack: 0
 --- !u!61 &5121237947874429910
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -263,6 +273,18 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: da63b613-3a50-45fd-b84b-32d820109820
     m_ActionName: PlayerMovement/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow,/DualShock4GamepadHID/leftStick/up,/DualShock4GamepadHID/leftStick/down,/DualShock4GamepadHID/leftStick/left,/DualShock4GamepadHID/leftStick/right,/Keyboard/s,/Keyboard/a,/Keyboard/d,/DualShock4GamepadHID/dpad/up,/DualShock4GamepadHID/dpad/down,/DualShock4GamepadHID/dpad/left,/DualShock4GamepadHID/dpad/right]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 722c2c6b-58ba-4d1e-8f57-b716da962316
+    m_ActionName: PlayerMovement/Jump[/Keyboard/space,/DualShock4GamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f0429482-f5cc-452f-b23a-4a9989c51316
+    m_ActionName: PlayerMovement/LightAttack[/DualShock4GamepadHID/buttonWest,/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a2698547-8165-4259-b2ff-fea8e13d4eb4
+    m_ActionName: PlayerMovement/HeavyAttack[/DualShock4GamepadHID/buttonEast,/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
