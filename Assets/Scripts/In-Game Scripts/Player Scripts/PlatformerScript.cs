@@ -21,12 +21,13 @@ public class PlatformerScript : MonoBehaviour
     const float GroundedRadius = .2f;
     bool facingRight = true;
     private Vector3 velocity = Vector3.zero;
-    int jumpAmount;
+    [HideInInspector]
+    public int jumpAmount;
 
 
     [Header("Movement Stats")]
-    [SerializeField]
-    int totalJumpAmount = 2;
+    [HideInInspector]
+    public int totalJumpAmount = 2;
     [HideInInspector]
     public bool isJumping;
     public float fallingSpeed = 45f, jumpForce = 400f, movementSpeed = 5f;
@@ -40,10 +41,9 @@ public class PlatformerScript : MonoBehaviour
     [HideInInspector]
     public Vector2 moveDirection;
 
-    [HideInInspector] //Temporarily Hide this
     public UnityEvent OnLanding;
 
-    private void Awake()
+    private void Start()
     {
         rigidbody = GetComponent<Rigidbody2D>();
     }
@@ -75,17 +75,15 @@ public class PlatformerScript : MonoBehaviour
         }
     }
 
-    private void HandleJumping()
+    public void HandleJumping()
     {
-        if (isJumping && jumpAmount != totalJumpAmount)
+        if (isJumping && jumpAmount < totalJumpAmount)
         {
             rigidbody.AddForce(new Vector2(0f, jumpForce));
             isGrounded = false;
             isJumping = false;
             jumpAmount += 1;
         }
-        else if (isGrounded && !isJumping)
-            jumpAmount = 0;
     }
 
     private void HandleFallingAndGrounded()
@@ -100,7 +98,10 @@ public class PlatformerScript : MonoBehaviour
             {
                 isGrounded = true;
                 if (!wasGrounded)
+                {
                     OnLanding.Invoke();
+                    jumpAmount = 0;
+                }
             }
         }
 
@@ -122,6 +123,7 @@ public class PlatformerScript : MonoBehaviour
 
     #endregion
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         if(isGrounded)
@@ -131,4 +133,5 @@ public class PlatformerScript : MonoBehaviour
 
         Gizmos.DrawCube(groundCheck.position, new Vector2(transform.localScale.x, GroundedRadius));
     }
+#endif
 }

@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour
     SpriteRenderer sprite;
 
     //[HideInInspector]
-    public bool isDashing, isJumping, lightAttack, heavyAttack;
+    public bool isDashing, lightAttack, heavyAttack;
 
     private void Start()
     {
@@ -68,6 +68,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnBecameInvisible()
     {
+        //Temporary
         if(canBeAttacked) healthSystem.Damage(10000);
         else
         {

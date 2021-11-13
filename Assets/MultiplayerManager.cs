@@ -4,16 +4,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class MultiplayerManager : MonoBehaviour
 {
-    PlayerInputManager playerInputManager;
     public static MultiplayerManager multiplayer;
     public event EventHandler UserAdded;
 
     public List<PlayerInput> users = new List<PlayerInput>();
 
-    private void Start()
+    private void Awake()
     {
         multiplayer = this;
-        playerInputManager = GetComponent<PlayerInputManager>();
     }
 
     public void AddToUsers(PlayerInput player)

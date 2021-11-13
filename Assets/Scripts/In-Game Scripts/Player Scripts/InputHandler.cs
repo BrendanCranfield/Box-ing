@@ -33,15 +33,18 @@ public class InputHandler : MonoBehaviour
 
     public void OnPlayerMovement(InputAction.CallbackContext inputContext)
     {
-        moveInput = inputContext.ReadValue<Vector2>();
-        platformExample.horizontal = moveInput.x;
-        platformExample.vertical = moveInput.y;
-        platformExample.moveDirection = moveInput;
+        if (platformExample != null)
+        {
+            moveInput = inputContext.ReadValue<Vector2>();
+            platformExample.horizontal = moveInput.x;
+            platformExample.vertical = moveInput.y;
+            platformExample.moveDirection = moveInput;
 
-        if (moveInput.y > 0.5f) { platformExample.isJumping = true; }
-        else { platformExample.isJumping = false; }
+            if (moveInput.y > 0.5f) { platformExample.isJumping = true; }
+            else { platformExample.isJumping = false; }
+        }
     }
-
+ 
     public void OnDash(InputAction.CallbackContext inputContext)
     {
         if (inputContext.performed)
@@ -53,8 +56,16 @@ public class InputHandler : MonoBehaviour
 
     public void onJump(InputAction.CallbackContext inputContext)
     {
-        playerManager.isJumping = true;
-        Debug.Log($"Jumping");
+        if (platformExample != null)
+        {
+            if (platformExample.isGrounded && platformExample.jumpAmount < platformExample.totalJumpAmount)
+            {
+                platformExample.isJumping = true;
+                Debug.Log($"Jumping");
+            }
+            else
+                platformExample.isJumping = false;
+        }
     }
 
     public void OnLightAttack(InputAction.CallbackContext inputContext)
@@ -76,7 +87,6 @@ public class InputHandler : MonoBehaviour
 
     private void LateUpdate()
     {
-        playerManager.isJumping = false;
         playerManager.isDashing = false;
         playerManager.lightAttack = false;
         playerManager.heavyAttack = false;
