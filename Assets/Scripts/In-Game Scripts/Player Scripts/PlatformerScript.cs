@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Rigidbody2D), (typeof(Collider2D)))]
 [AddComponentMenu("Player Movement / Platform Example")]
 public class PlatformerScript : MonoBehaviour
 {
@@ -45,7 +44,8 @@ public class PlatformerScript : MonoBehaviour
 
     private void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        if (TryGetComponent(out Rigidbody2D rb)) { rigidbody = rb; }
+        else { rigidbody = GetComponentInChildren<Rigidbody2D>(); }
     }
 
     void FixedUpdate()
@@ -91,21 +91,21 @@ public class PlatformerScript : MonoBehaviour
         bool wasGrounded = isGrounded;
         isGrounded = false;
 
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(groundCheck.position, new Vector2(transform.localScale.x, GroundedRadius), ignoreLayers);
-        for (int i = 0; i < colliders.Length; i++)
+        Collider2D colliders = Physics2D.OverlapBox(groundCheck.position, new Vector2(transform.localScale.x, GroundedRadius), ignoreLayers);
+        if (colliders.gameObject != gameObject)
         {
-            if(colliders[i].gameObject != gameObject)
+            if (colliders.CompareTag("Powerups"))
+                return;
+
+            isGrounded = true;
+            if (!wasGrounded)
             {
-                isGrounded = true;
-                if (!wasGrounded)
-                {
-                    OnLanding.Invoke();
-                    jumpAmount = 0;
-                }
+                OnLanding.Invoke();
+                jumpAmount = 0;
             }
         }
 
-        if(!isGrounded)
+        if (!isGrounded)
         {
             rigidbody.AddForce(-Vector2.up * fallingSpeed);
             rigidbody.AddForce(moveDirection * fallingSpeed / 7.5f);

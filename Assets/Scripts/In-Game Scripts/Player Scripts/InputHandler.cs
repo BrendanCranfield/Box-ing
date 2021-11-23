@@ -70,13 +70,13 @@ public class InputHandler : MonoBehaviour
 
     public void OnLightAttack(InputAction.CallbackContext inputContext)
     {
-        playerManager.lightAttack = true;
+        //playerManager.HandleAttacking(false);
         Debug.Log($"Light");
     }
 
     public void OnHeavyAttack(InputAction.CallbackContext inputContext)
     {
-        playerManager.heavyAttack = true;
+        //playerManager.HandleAttacking(true);
         Debug.Log($"Heavy");
     }
 

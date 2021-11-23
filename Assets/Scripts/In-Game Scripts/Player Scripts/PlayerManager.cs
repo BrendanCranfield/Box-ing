@@ -19,7 +19,7 @@ public class PlayerManager : MonoBehaviour
     bool canBeAttacked;
     SpriteRenderer sprite;
 
-    //[HideInInspector]
+    [HideInInspector]
     public bool isDashing, lightAttack, heavyAttack;
 
     private void Start()
@@ -53,7 +53,7 @@ public class PlayerManager : MonoBehaviour
             canBeAttacked = false;
             StartCoroutine(GracePeriod(gracePeriodAmount));
         }
-        else { gameObject.SetActive(false); }
+        else { GetComponent<PlatformerScript>().enabled = false; }
     }
 
     IEnumerator GracePeriod(float gracePeriodTime)
@@ -79,11 +79,18 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void HandleAttacking()
+    public void HandleAttacking(bool isHeavyAttack)
     {
         if(canBeAttacked)
         {
-
+            if (isHeavyAttack)
+            {
+                Debug.Log("Heavy Attack!");
+            }
+            else
+            {
+                Debug.Log("Light Attack!");
+            }
         }
         //weaponItem.GetComponent<>()   //Get weapon enum from script and constructor
 
