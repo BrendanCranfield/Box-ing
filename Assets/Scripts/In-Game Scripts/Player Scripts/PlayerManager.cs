@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour
     SpriteRenderer sprite;
 
     [HideInInspector]
-    public bool isDashing, lightAttack, heavyAttack;
+    public bool lightAttack, heavyAttack;
 
     private void Start()
     {
@@ -33,6 +33,14 @@ public class PlayerManager : MonoBehaviour
 
         canBeAttacked = true;
     }
+
+    private void LateUpdate()
+    {
+        lightAttack = false;
+        heavyAttack = false;
+    }
+
+    #region Health & Death
 
     private void HealthSystem_OnHealthChanged(object sender, System.EventArgs e)
     {
@@ -79,6 +87,20 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Fighting
+
+    public void OnLightAttack(InputAction.CallbackContext context)
+    {
+
+    }
+
+    public void OnHeavyAttack(InputAction.CallbackContext context)
+    {
+
+    }
+
     public void HandleAttacking(bool isHeavyAttack)
     {
         if(canBeAttacked)
@@ -114,4 +136,6 @@ public class PlayerManager : MonoBehaviour
         }
         */
     }
+
+    #endregion
 }

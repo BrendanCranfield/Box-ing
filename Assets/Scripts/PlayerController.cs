@@ -49,6 +49,14 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dashing"",
+                    ""type"": ""Button"",
+                    ""id"": ""9176e112-1d5b-48ef-96b7-b39987caaed1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -218,39 +226,6 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""down"",
-                    ""id"": ""3a27be9b-7140-4cec-875f-cb96766af6b0"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""1d062280-ffd5-4011-a43e-c8562c6f7b93"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""85e7e593-f83d-4632-9f9d-399c6efb60ea"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""PC"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""Gamepad D-Pad"",
                     ""id"": ""beab5052-2541-424c-a5ca-86daaf147453"",
                     ""path"": ""2DVector(mode=2)"",
@@ -370,6 +345,28 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""action"": ""HeavyAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4089f8b-0e94-4b80-b78c-007aff60075f"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""Dashing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""358c83cf-f783-4dc7-9e78-15a6e43634bc"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dashing"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -410,6 +407,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
         m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
         m_PlayerMovement_LightAttack = m_PlayerMovement.FindAction("LightAttack", throwIfNotFound: true);
         m_PlayerMovement_HeavyAttack = m_PlayerMovement.FindAction("HeavyAttack", throwIfNotFound: true);
+        m_PlayerMovement_Dashing = m_PlayerMovement.FindAction("Dashing", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -463,6 +461,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerMovement_Jump;
     private readonly InputAction m_PlayerMovement_LightAttack;
     private readonly InputAction m_PlayerMovement_HeavyAttack;
+    private readonly InputAction m_PlayerMovement_Dashing;
     public struct PlayerMovementActions
     {
         private @PlayerController m_Wrapper;
@@ -471,6 +470,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerMovement_Jump;
         public InputAction @LightAttack => m_Wrapper.m_PlayerMovement_LightAttack;
         public InputAction @HeavyAttack => m_Wrapper.m_PlayerMovement_HeavyAttack;
+        public InputAction @Dashing => m_Wrapper.m_PlayerMovement_Dashing;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -492,6 +492,9 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 @HeavyAttack.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnHeavyAttack;
                 @HeavyAttack.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnHeavyAttack;
                 @HeavyAttack.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnHeavyAttack;
+                @Dashing.started -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDashing;
+                @Dashing.performed -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDashing;
+                @Dashing.canceled -= m_Wrapper.m_PlayerMovementActionsCallbackInterface.OnDashing;
             }
             m_Wrapper.m_PlayerMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -508,6 +511,9 @@ public class @PlayerController : IInputActionCollection, IDisposable
                 @HeavyAttack.started += instance.OnHeavyAttack;
                 @HeavyAttack.performed += instance.OnHeavyAttack;
                 @HeavyAttack.canceled += instance.OnHeavyAttack;
+                @Dashing.started += instance.OnDashing;
+                @Dashing.performed += instance.OnDashing;
+                @Dashing.canceled += instance.OnDashing;
             }
         }
     }
@@ -536,5 +542,6 @@ public class @PlayerController : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnLightAttack(InputAction.CallbackContext context);
         void OnHeavyAttack(InputAction.CallbackContext context);
+        void OnDashing(InputAction.CallbackContext context);
     }
 }

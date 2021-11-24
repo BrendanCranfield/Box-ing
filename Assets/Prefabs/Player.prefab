@@ -40,7 +40,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5121237947874429911}
   - component: {fileID: 5121237947874429908}
-  - component: {fileID: 5121237947874429909}
   - component: {fileID: 5121237947874429906}
   - component: {fileID: 5121237947874429907}
   - component: {fileID: 5121237947874429904}
@@ -52,7 +51,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5121237947874429911
 Transform:
   m_ObjectHideFlags: 0
@@ -119,19 +118,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5121237947874429909
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5121237947874429905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00472dae29ebd034a8ad8ad68b892aa4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveInput: {x: 0, y: 0}
 --- !u!50 &5121237947874429906
 Rigidbody2D:
   serializedVersion: 4
@@ -170,17 +156,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundCheck: {fileID: 5121237947541212209}
-  jumpAmount: 0
   totalJumpAmount: 2
+  jumpAmount: 0
+  isDashing: 0
   isJumping: 0
   fallingSpeed: 15
   jumpForce: 450
   movementSpeed: 10
   movementSmoothing: 0.05
   inAirControl: 1
-  horizontal: 0
-  vertical: 0
-  moveDirection: {x: 0, y: 0}
   OnLanding:
     m_PersistentCalls:
       m_Calls: []
@@ -203,7 +187,6 @@ MonoBehaviour:
     dropChance: 0
     weaponObject: {fileID: 0}
     weaponType: 0
-  isDashing: 0
   lightAttack: 0
   heavyAttack: 0
 --- !u!61 &5121237947874429910
@@ -259,8 +242,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5121237947874429909}
-        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+      - m_Target: {fileID: 5121237947874429907}
+        m_TargetAssemblyTypeName: PlatformerScript, Assembly-CSharp
         m_MethodName: OnPlayerMovement
         m_Mode: 0
         m_Arguments:
@@ -275,9 +258,9 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d,/Keyboard/upArrow,/Keyboard/downArrow,/Keyboard/leftArrow,/Keyboard/rightArrow,/DualShock4GamepadHID/leftStick/up,/DualShock4GamepadHID/leftStick/down,/DualShock4GamepadHID/leftStick/left,/DualShock4GamepadHID/leftStick/right,/Keyboard/s,/Keyboard/a,/Keyboard/d,/DualShock4GamepadHID/dpad/up,/DualShock4GamepadHID/dpad/down,/DualShock4GamepadHID/dpad/left,/DualShock4GamepadHID/dpad/right]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5121237947874429909}
-        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
-        m_MethodName: onJump
+      - m_Target: {fileID: 5121237947874429907}
+        m_TargetAssemblyTypeName: PlatformerScript, Assembly-CSharp
+        m_MethodName: OnJump
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -291,8 +274,8 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/Jump[/Keyboard/space,/DualShock4GamepadHID/buttonSouth]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5121237947874429909}
-        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+      - m_Target: {fileID: 5121237947874429904}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: OnLightAttack
         m_Mode: 0
         m_Arguments:
@@ -307,8 +290,8 @@ MonoBehaviour:
     m_ActionName: PlayerMovement/LightAttack[/DualShock4GamepadHID/buttonWest,/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5121237947874429909}
-        m_TargetAssemblyTypeName: InputHandler, Assembly-CSharp
+      - m_Target: {fileID: 5121237947874429904}
+        m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
         m_MethodName: OnHeavyAttack
         m_Mode: 0
         m_Arguments:
@@ -321,6 +304,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a2698547-8165-4259-b2ff-fea8e13d4eb4
     m_ActionName: PlayerMovement/HeavyAttack[/DualShock4GamepadHID/buttonEast,/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5121237947874429907}
+        m_TargetAssemblyTypeName: PlatformerScript, Assembly-CSharp
+        m_MethodName: OnDash
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9176e112-1d5b-48ef-96b7-b39987caaed1
+    m_ActionName: PlayerMovement/Dashing[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerMovement
