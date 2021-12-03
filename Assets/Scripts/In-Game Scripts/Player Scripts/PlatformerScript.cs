@@ -9,7 +9,12 @@ public class PlatformerScript : MonoBehaviour
 {
     /*  To add animations, simply add an animator component and set up a blend tree for movement.   */
 
-    private new Rigidbody2D rigidbody;
+    new Rigidbody2D rigidbody;
+    PlayerInput playerInput;
+    Camera main;
+
+    [SerializeField] GameObject landingEffect;
+    [SerializeField] Transform lookObject;
 
     [Header("Grounded Detection")]
     public bool isGrounded = true;  //Check if grounded.
@@ -21,10 +26,12 @@ public class PlatformerScript : MonoBehaviour
     private Vector3 velocity = Vector3.zero;    //For SmoothDamp in HandleMovement. (Requires velocity reference)
     Vector2 moveInput;  //Sets the movement direction of the player based on user inputs.
 
+    [SerializeField] int maxJumpCount = 2;
+    int currentJumpCount;
+    public int JumpCount { get { return currentJumpCount - 1; } private set { if(currentJumpCount <= 0) { currentJumpCount = 0; } else { currentJumpCount = value - 1; } } }
 
     [Header("Movement Stats")]
     [HideInInspector] public bool isDashing;    //Checks if the player is dashing.
-    [HideInInspector] public bool isJumping;    //Checks if the player is jumping.
     public float fallingSpeed = 45f, jumpForce = 400f, movementSpeed = 5f;      //Sets speed variables for use in moving or powerups.
     [Range(0, .3f)] [SerializeField] float movementSmoothing = 0.05f;   //Used for making the movement smooth instead of jittery.
     [SerializeField] bool inAirControl;     //Checks if player can move in the air.
@@ -35,33 +42,61 @@ public class PlatformerScript : MonoBehaviour
 
     public UnityEvent OnLanding;    //This creates a unity event that can play particles if the player has landed on the floor.
 
+    Keyboard keyboard;
+    Gamepad gamepad;
+    
     private void Start()
     {
-        if (TryGetComponent(out Rigidbody2D rb)) { rigidbody = rb; }
-        else { rigidbody = GetComponentInChildren<Rigidbody2D>(); }
-
+        rigidbody = GetComponent<Rigidbody2D>();
         normalGravityScale = rigidbody.gravityScale;
+        JumpCount = maxJumpCount;
+        playerInput = GetComponent<PlayerInput>();
+        main = Camera.main;
+
+        Debug.Log(playerInput.currentControlScheme);
     }
 
     void FixedUpdate()
     {
         HandleMovement();
-        HandleFallingAndGrounded();
-        HandleJumping();
+        HandleLook();
         HandleDashing();
+        HandleJumping();
+        HandleFallingAndGrounded();
     }
+
+    #region Look Around
+    Vector2 playerView;
+    public void Look(InputAction.CallbackContext inputContext) { playerView = inputContext.ReadValue<Vector2>(); }   //Sets the look direction of the player.
+
+    private void HandleLook()
+    {
+        switch(playerInput.currentControlScheme)
+        {
+            case "PC":
+                //Using mouse
+                //------------- Bugged ----------------
+                var mousePosition = main.ScreenToWorldPoint(playerView);
+                Vector2 lookDirection = mousePosition - transform.position;
+                float pcAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90;
+                lookObject.localRotation = Quaternion.AngleAxis(pcAngle, Vector3.forward);
+                break;
+
+            case "Gamepad":
+                //Using controller
+                Vector2 controllerLookDirection = new Vector2(playerView.x, playerView.y);
+                float controllerAngle = Mathf.Atan2(controllerLookDirection.y, controllerLookDirection.x) * Mathf.Rad2Deg - 90;
+                if (controllerLookDirection.sqrMagnitude > 0) { lookObject.localRotation = Quaternion.AngleAxis(controllerAngle, Vector3.forward); }
+                break;
+        }
+    }
+
+    #endregion
 
     #region Movement
-
-    public void OnPlayerMovement(InputAction.CallbackContext inputContext)  //Sets the movement direction.
-    {
-        moveInput = inputContext.ReadValue<Vector2>();
-    }
-
-    public void OnJump(InputAction.CallbackContext inputContext)    //Sets the jump based on user input.
-    {
-        if (inputContext.performed) { isJumping = true; }
-        else { isJumping = false; }
+    bool isJumping;
+    public void OnPlayerMovement(InputAction.CallbackContext inputContext) { moveInput = inputContext.ReadValue<Vector2>(); }   //Sets the movement direction.
+    public void OnJump(InputAction.CallbackContext inputContext) { if (inputContext.performed) { isJumping = true; }    //Sets the jump based on user input.
     }
 
     private void HandleMovement()
@@ -78,12 +113,16 @@ public class PlatformerScript : MonoBehaviour
 
     public void HandleJumping()
     {
-        if (isJumping)
+        if(isJumping)
         {
-            rigidbody.AddForce(new Vector2(0f, jumpForce));
-            isJumping = false;
+            if (JumpCount > 0 && rigidbody != null || isGrounded && rigidbody != null)
+            {
+                JumpCount -= 1;
+                rigidbody.velocity = new Vector3(rigidbody.velocity.x, 0, 0);
+                rigidbody.AddForce(new Vector2(0f, jumpForce * 10));
+                isJumping = false;
+            }
         }
-        else return;
     }
 
     private void HandleFallingAndGrounded()
@@ -98,8 +137,23 @@ public class PlatformerScript : MonoBehaviour
             {
                 if (colliders[i].CompareTag("Powerups")) return;
                 isGrounded = true;
-                if (!wasGrounded) { OnLanding.Invoke(); }
+                if(currentJumpCount != maxJumpCount) { currentJumpCount = maxJumpCount; }
+                if (!wasGrounded) 
+                { 
+                    OnLanding.Invoke();
+                    StartCoroutine(OnLandingEffects());
+                }
             }
+        }
+
+        IEnumerator OnLandingEffects()
+        {
+            GameObject effect = Instantiate(landingEffect, transform.position, Quaternion.identity) as GameObject;
+            effect.transform.position = new Vector2(transform.position.x, transform.position.y - 0.43f);
+            effect.GetComponent<ParticleSystem>().Play();
+            yield return new WaitForSeconds(0.5f);
+            Destroy(effect);
+            StopCoroutine(OnLandingEffects());
         }
 
         if (!isGrounded)
@@ -121,13 +175,12 @@ public class PlatformerScript : MonoBehaviour
     #endregion
 
     #region Dashing
-
     public void OnDash(InputAction.CallbackContext inputContext)
     {
-        if (canDash) 
+        if (canDash && gameObject.activeInHierarchy) 
         { 
             if (dashCoroutine != null) { StopCoroutine(dashCoroutine); }
-            dashCoroutine = Dash(0.1f, 1f);
+            dashCoroutine = Dash(0.1f, 0.5f);
             StartCoroutine(dashCoroutine);
         }
     }
@@ -147,14 +200,7 @@ public class PlatformerScript : MonoBehaviour
         canDash = true;
     }
 
-    void HandleDashing()
-    {
-        if(isDashing)
-        {
-            rigidbody.AddForce(new Vector2(moveInput.x * movementSpeed * 2, moveInput.y * movementSpeed), ForceMode2D.Impulse);
-        }
-    }
-
+    void HandleDashing() { if(isDashing) { rigidbody.AddForce(new Vector2(moveInput.x * movementSpeed * 1.5f, 0), ForceMode2D.Impulse); } }
     #endregion
 
 #if UNITY_EDITOR

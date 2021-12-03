@@ -8,19 +8,14 @@ using Random = UnityEngine.Random;
 [AddComponentMenu("Player Movement / Player Manager")]
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField]
-    int playerLives = 3;
-    [SerializeField]
-    float gracePeriodAmount = 5;
+    [SerializeField] int maxLives = 3;
+    [SerializeField] float gracePeriodAmount = 5;
     //[HideInInspector]
     public WeaponItems weaponItem;
 
-    HealthSystem healthSystem;
-    bool canBeAttacked;
+    [HideInInspector] public HealthSystem healthSystem;
     SpriteRenderer sprite;
-
-    [HideInInspector]
-    public bool lightAttack, heavyAttack;
+    bool canBeAttacked;
 
     private void Start()
     {
@@ -28,16 +23,11 @@ public class PlayerManager : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         healthSystem = new HealthSystem(100);
 
+        healthSystem.MaxLives = maxLives;
         healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
         healthSystem.OnDead += HealthSystem_OnDead;
 
         canBeAttacked = true;
-    }
-
-    private void LateUpdate()
-    {
-        lightAttack = false;
-        heavyAttack = false;
     }
 
     #region Health & Death
@@ -47,15 +37,13 @@ public class PlayerManager : MonoBehaviour
         //If health is changed. eg damage, healing, etc.
 
         //Can be used to show health bar or health percentage
-        Debug.Log(healthSystem.GetHealth());
+        Debug.Log($"Player Health: {healthSystem.GetHealthPercent}%");
     }
 
     private void HealthSystem_OnDead(object sender, System.EventArgs e)
     {
         //If player dies
-        playerLives -= 1;
-
-        if (playerLives > 0 && gameObject.activeInHierarchy)
+        if (healthSystem.Lives > 0 && gameObject.activeInHierarchy)
         {
             transform.position = new Vector3(Random.Range(-7, 7), 4, 0);
             canBeAttacked = false;
@@ -74,45 +62,25 @@ public class PlayerManager : MonoBehaviour
         canBeAttacked = true;
     }
 
-    private void OnBecameInvisible()
-    {
-        //Temporary
-        if(canBeAttacked) healthSystem.Damage(10000);
-        else
-        {
-            Vector3 minScreenBounds = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
-            Vector3 maxScreenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, minScreenBounds.x + 1, maxScreenBounds.x - 1), Mathf.Clamp(transform.position.y, minScreenBounds.y + 1, maxScreenBounds.y - 1), transform.position.z);
-        }
-    }
-
     #endregion
 
     #region Fighting
 
-    public void OnLightAttack(InputAction.CallbackContext context)
+    public void OnAttack(InputAction.CallbackContext context)
     {
 
     }
 
-    public void OnHeavyAttack(InputAction.CallbackContext context)
+    public void OnGrapple(InputAction.CallbackContext context)
     {
 
     }
 
-    public void HandleAttacking(bool isHeavyAttack)
+    public void HandleAttacking()
     {
         if(canBeAttacked)
         {
-            if (isHeavyAttack)
-            {
-                Debug.Log("Heavy Attack!");
-            }
-            else
-            {
-                Debug.Log("Light Attack!");
-            }
+
         }
         //weaponItem.GetComponent<>()   //Get weapon enum from script and constructor
 
