@@ -37,10 +37,8 @@ public class PowerupManager : MonoBehaviour
 
         for (int i = 0; i < weapons.Count; i++)     //Loops through entire weapons list and separates them into ranged and melee weapons.
         {
-            if (weapons[i].weaponType == WeaponItems.WeaponType.Ranged)
-                rangedWeapons.Add(weapons[i]);
-            else
-                meleeWeapons.Add(weapons[i]);
+            if (weapons[i].weaponType == WeaponItems.WeaponType.Ranged) { rangedWeapons.Add(weapons[i]); }
+            else { meleeWeapons.Add(weapons[i]); }
         }
     }
 
@@ -67,23 +65,12 @@ public class PowerupManager : MonoBehaviour
         switch(isRanged)    //Chooses random weapon based on if the weapon is ranged or not.
         {
             case true:
-                for (int i = 0; i < rangedWeapons.Count; i++)
-                {
-                    if (Random.value <= rangedWeapons[i].dropChance / 100)  //Randomises a value and compares that to the drop chance.
-                    {
-                        returnedItem = rangedWeapons[i];
-                    }
-                }
+                //Randomises a value and compares that to the drop chance.
+                for (int i = 0; i < rangedWeapons.Count; i++) { if (Random.value <= rangedWeapons[i].dropChance / 100) { returnedItem = rangedWeapons[i]; } }
                 return returnedItem;
 
             case false:
-                for (int i = 0; i < meleeWeapons.Count; i++)
-                {
-                    if (Random.value <= meleeWeapons[i].dropChance / 100)
-                    {
-                        returnedItem = meleeWeapons[i];
-                    }
-                }
+                for (int i = 0; i < meleeWeapons.Count; i++) { if (Random.value <= meleeWeapons[i].dropChance / 100) { returnedItem = meleeWeapons[i]; } }
                 return returnedItem;
         }
     }

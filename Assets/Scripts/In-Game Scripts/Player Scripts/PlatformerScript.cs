@@ -12,6 +12,7 @@ public class PlatformerScript : MonoBehaviour
     new Rigidbody2D rigidbody;
     PlayerInput playerInput;
     Camera main;
+    SpriteRenderer playerSprite;
 
     [SerializeField] GameObject landingEffect;
     [SerializeField] Transform lookObject;
@@ -52,6 +53,7 @@ public class PlatformerScript : MonoBehaviour
         JumpCount = maxJumpCount;
         playerInput = GetComponent<PlayerInput>();
         main = Camera.main;
+        playerSprite = GetComponentInChildren<SpriteRenderer>();
 
         Debug.Log(playerInput.currentControlScheme);
     }
@@ -75,18 +77,17 @@ public class PlatformerScript : MonoBehaviour
         {
             case "PC":
                 //Using mouse
-                //------------- Bugged ----------------
-                var mousePosition = main.ScreenToWorldPoint(playerView);
+                var mousePosition = main.ScreenToWorldPoint(Input.mousePosition);
                 Vector2 lookDirection = mousePosition - transform.position;
                 float pcAngle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg - 90;
                 lookObject.localRotation = Quaternion.AngleAxis(pcAngle, Vector3.forward);
+                
                 break;
 
             case "Gamepad":
                 //Using controller
-                Vector2 controllerLookDirection = new Vector2(playerView.x, playerView.y);
-                float controllerAngle = Mathf.Atan2(controllerLookDirection.y, controllerLookDirection.x) * Mathf.Rad2Deg - 90;
-                if (controllerLookDirection.sqrMagnitude > 0) { lookObject.localRotation = Quaternion.AngleAxis(controllerAngle, Vector3.forward); }
+                float controllerAngle = Mathf.Atan2(playerView.y, playerView.x) * Mathf.Rad2Deg - 90;
+                if (playerView.sqrMagnitude > 0) { lookObject.localRotation = Quaternion.AngleAxis(controllerAngle, Vector3.forward); }
                 break;
         }
     }
@@ -167,9 +168,7 @@ public class PlatformerScript : MonoBehaviour
     {
         facingRight = !facingRight;
 
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        playerSprite.flipX = facingRight;
     }
 
     #endregion

@@ -30,7 +30,7 @@ public class @PlayerController : IInputActionCollection, IDisposable
                     ""name"": ""LookAround"",
                     ""type"": ""PassThrough"",
                     ""id"": ""3e35c16f-9175-4d06-8858-dbd7ec912c13"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
                 },

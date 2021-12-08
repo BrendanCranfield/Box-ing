@@ -21,7 +21,7 @@ public class PowerupDetector : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            //GameObject createdWeapon = Instantiate(powerupManager.ChooseRandomWeapon(isRangedWeapon).weaponObject);
+            //Needs stuff here
 
             Destroy(gameObject);
         }

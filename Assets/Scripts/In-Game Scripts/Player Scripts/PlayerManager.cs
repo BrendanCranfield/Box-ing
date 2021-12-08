@@ -12,22 +12,35 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float gracePeriodAmount = 5;
     //[HideInInspector]
     public WeaponItems weaponItem;
+    CircleCollider2D attackCollider;
 
     [HideInInspector] public HealthSystem healthSystem;
+    [HideInInspector] public bool attacking;
     SpriteRenderer sprite;
     bool canBeAttacked;
+
+    private void Awake()
+    {
+        BoxingEvents.attackEvent.AddListener(HandleAttacking);
+    }
 
     private void Start()
     {
         MultiplayerManager.multiplayer.AddToUsers(GetComponent<PlayerInput>());
         sprite = GetComponent<SpriteRenderer>();
         healthSystem = new HealthSystem(100);
+        attackCollider = GetComponentInChildren<CircleCollider2D>();
 
         healthSystem.MaxLives = maxLives;
         healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
         healthSystem.OnDead += HealthSystem_OnDead;
 
         canBeAttacked = true;
+    }
+
+    private void LateUpdate()
+    {
+        attacking = false;
     }
 
     #region Health & Death
@@ -68,7 +81,7 @@ public class PlayerManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-
+        if (context.performed) { attacking = true; Debug.Log("Attacking"); }
     }
 
     public void OnGrapple(InputAction.CallbackContext context)
@@ -76,8 +89,9 @@ public class PlayerManager : MonoBehaviour
 
     }
 
-    public void HandleAttacking()
+    public void HandleAttacking(GameObject enemyPlayer)
     {
+        enemyPlayer.GetComponent<PlayerManager>().healthSystem.Damage(10);
         if(canBeAttacked)
         {
 
