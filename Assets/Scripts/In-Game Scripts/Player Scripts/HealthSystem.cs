@@ -6,6 +6,7 @@ public class HealthSystem
 {
     public event EventHandler OnHealthChanged;
     public event EventHandler OnDead;
+    public bool canBeAttacked;
 
     int healthMax;
     int health;

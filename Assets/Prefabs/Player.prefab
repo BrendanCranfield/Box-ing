@@ -163,12 +163,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLives: 3
   gracePeriodAmount: 5
-  weaponItem:
-    itemName: 
-    dropChance: 0
-    weaponObject: {fileID: 0}
-    weaponType: 0
   attacking: 0
+  grappling: 0
 --- !u!61 &5121237947874429910
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -412,8 +408,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8971147655763924631}
-  - component: {fileID: 6054323110568666460}
-  - component: {fileID: 5323504347129502602}
+  - component: {fileID: 2789018156547281369}
   m_Layer: 0
   m_Name: LookObject
   m_TagString: Untagged
@@ -430,12 +425,12 @@ Transform:
   m_GameObject: {fileID: 8488358240490654685}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7349961089163369346}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &6054323110568666460
+--- !u!58 &2789018156547281369
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -448,18 +443,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.87}
+  m_Offset: {x: 0, y: -0.15}
   serializedVersion: 2
-  m_Radius: 2.14
---- !u!114 &5323504347129502602
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8488358240490654685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a23f01e4b2f26e4a9de9987a5dd3e09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Radius: 0.5

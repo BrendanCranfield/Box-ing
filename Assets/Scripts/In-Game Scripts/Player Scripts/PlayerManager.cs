@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
@@ -10,32 +8,21 @@ public class PlayerManager : MonoBehaviour
 {
     [SerializeField] int maxLives = 3;
     [SerializeField] float gracePeriodAmount = 5;
-    //[HideInInspector]
-    public WeaponItems weaponItem;
-    CircleCollider2D attackCollider;
 
     [HideInInspector] public HealthSystem healthSystem;
-    [HideInInspector] public bool attacking;
+    [HideInInspector] public bool attacking, grappling;
     SpriteRenderer sprite;
-    bool canBeAttacked;
-
-    private void Awake()
-    {
-        BoxingEvents.attackEvent.AddListener(HandleAttacking);
-    }
 
     private void Start()
     {
         MultiplayerManager.multiplayer.AddToUsers(GetComponent<PlayerInput>());
         sprite = GetComponent<SpriteRenderer>();
         healthSystem = new HealthSystem(100);
-        attackCollider = GetComponentInChildren<CircleCollider2D>();
 
         healthSystem.MaxLives = maxLives;
         healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
         healthSystem.OnDead += HealthSystem_OnDead;
-
-        canBeAttacked = true;
+        healthSystem.canBeAttacked = true;
     }
 
     private void LateUpdate()
@@ -59,7 +46,7 @@ public class PlayerManager : MonoBehaviour
         if (healthSystem.Lives > 0 && gameObject.activeInHierarchy)
         {
             transform.position = new Vector3(Random.Range(-7, 7), 4, 0);
-            canBeAttacked = false;
+            healthSystem.canBeAttacked = false;
             StartCoroutine(GracePeriod(gracePeriodAmount));
         }
         else { GetComponent<PlatformerScript>().enabled = false; }
@@ -72,7 +59,7 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(gracePeriodTime);
         Debug.Log("Grace Period Ended!");
         sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f);
-        canBeAttacked = true;
+        healthSystem.canBeAttacked = true;
     }
 
     #endregion
@@ -86,37 +73,18 @@ public class PlayerManager : MonoBehaviour
 
     public void OnGrapple(InputAction.CallbackContext context)
     {
+        if (context.started) { grappling = true; Debug.Log("Grappling"); }  //Grapples the enemy player while holding down the button.
+        if (context.canceled) { grappling = false; Debug.Log("Stopped grapple"); }  //lets the enemy player go if button is released.
+    }
+
+    public void HandleAttacking()
+    {
 
     }
 
-    public void HandleAttacking(GameObject enemyPlayer)
+    public void HandleGrapple()
     {
-        enemyPlayer.GetComponent<PlayerManager>().healthSystem.Damage(10);
-        if(canBeAttacked)
-        {
 
-        }
-        //weaponItem.GetComponent<>()   //Get weapon enum from script and constructor
-
-        /*
-        if (weaponItem != null)
-        {
-            switch (currentWeapon)
-            {
-                case WeaponItems.WeaponType.Ranged: //Current weapon equipt is using ranged damage. eg bows, guns, etc.
-
-                    break;
-
-                case WeaponItems.WeaponType.Melee: //Current weapon equipt is a melee weapon. eg sword, knife, etc.
-
-                    break;
-            }
-        }
-        else //Using fists to attack
-        {
-
-        }
-        */
     }
 
     #endregion
