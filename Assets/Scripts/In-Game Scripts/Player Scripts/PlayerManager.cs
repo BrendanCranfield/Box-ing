@@ -10,19 +10,22 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] float gracePeriodAmount = 5;
 
     [HideInInspector] public HealthSystem healthSystem;
-    [HideInInspector] public bool attacking, grappling;
-    SpriteRenderer sprite;
+    [HideInInspector] public bool attacking, grappling, canAttack;
+    [SerializeField] LayerMask attackingLayerMask;
+    PlatformerScript platformerScript;
 
     private void Start()
     {
         MultiplayerManager.multiplayer.AddToUsers(GetComponent<PlayerInput>());
-        sprite = GetComponent<SpriteRenderer>();
         healthSystem = new HealthSystem(100);
 
         healthSystem.MaxLives = maxLives;
         healthSystem.OnHealthChanged += HealthSystem_OnHealthChanged;
         healthSystem.OnDead += HealthSystem_OnDead;
         healthSystem.canBeAttacked = true;
+        canAttack = true;
+
+        platformerScript = GetComponent<PlatformerScript>();
     }
 
     private void LateUpdate()
@@ -37,7 +40,7 @@ public class PlayerManager : MonoBehaviour
         //If health is changed. eg damage, healing, etc.
 
         //Can be used to show health bar or health percentage
-        Debug.Log($"Player Health: {healthSystem.GetHealthPercent}%");
+        Debug.Log($"{gameObject.name} Health: {healthSystem.GetHealthPercent}%");
     }
 
     private void HealthSystem_OnDead(object sender, System.EventArgs e)
@@ -54,11 +57,11 @@ public class PlayerManager : MonoBehaviour
 
     IEnumerator GracePeriod(float gracePeriodTime)
     {
-        sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 0.15f);
+        platformerScript.playerSprite.color = new Color(platformerScript.playerSprite.color.r, platformerScript.playerSprite.color.g, platformerScript.playerSprite.color.b, 0.15f);
         Debug.Log($"Grace Period: {gracePeriodAmount} seconds");
         yield return new WaitForSeconds(gracePeriodTime);
         Debug.Log("Grace Period Ended!");
-        sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f);
+        platformerScript.playerSprite.color = new Color(platformerScript.playerSprite.color.r, platformerScript.playerSprite.color.g, platformerScript.playerSprite.color.b, 1f);
         healthSystem.canBeAttacked = true;
     }
 
@@ -68,7 +71,7 @@ public class PlayerManager : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (context.performed) { attacking = true; Debug.Log("Attacking"); }
+        if (context.performed) { attacking = true; }
     }
 
     public void OnGrapple(InputAction.CallbackContext context)
@@ -79,12 +82,32 @@ public class PlayerManager : MonoBehaviour
 
     public void HandleAttacking()
     {
+        if(attacking && canAttack)
+        {
+            //Needs to get radius from weapon data
+            Collider2D[] enemies = Physics2D.OverlapCircleAll(platformerScript.lookObject.position, 1, attackingLayerMask);
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if(enemies[i].CompareTag("Player") && !gameObject) { enemies[i].GetComponent<PlayerManager>().healthSystem.Damage(5); Debug.Log($"{enemies[i].name} has taken 5 damage"); }
+            }
+        }
+    }
 
+    IEnumerator AttackingCooldown()
+    {
+        canAttack = false;
+        yield return new WaitForSeconds(0.25f);
+        canAttack = true;
     }
 
     public void HandleGrapple()
     {
 
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(platformerScript.lookObject.position, 1);
     }
 
     #endregion

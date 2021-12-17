@@ -12,10 +12,10 @@ public class PlatformerScript : MonoBehaviour
     new Rigidbody2D rigidbody;
     PlayerInput playerInput;
     Camera main;
-    SpriteRenderer playerSprite;
+    [HideInInspector] public SpriteRenderer playerSprite;
 
     [SerializeField] GameObject landingEffect;
-    [SerializeField] Transform lookObject;
+    public Transform lookObject;
 
     [Header("Grounded Detection")]
     public bool isGrounded = true;  //Check if grounded.
@@ -24,12 +24,12 @@ public class PlatformerScript : MonoBehaviour
 
     const float GroundedRadius = .2f;   //Sets ground radius.
     bool facingRight = true;    //Checks if facing right.
-    private Vector3 velocity = Vector3.zero;    //For SmoothDamp in HandleMovement. (Requires velocity reference)
+    Vector3 velocity = Vector3.zero;    //For SmoothDamp in HandleMovement. (Requires velocity reference)
     Vector2 moveInput;  //Sets the movement direction of the player based on user inputs.
 
     [SerializeField] int maxJumpCount = 2;
     int currentJumpCount;
-    public int JumpCount { get { return currentJumpCount - 1; } private set { if(currentJumpCount <= 0) { currentJumpCount = 0; } else { currentJumpCount = value - 1; } } }
+    private int JumpCount { get { return currentJumpCount - 1; } set { if(currentJumpCount <= 0) { currentJumpCount = 0; } else { currentJumpCount = value - 1; } } }
 
     [Header("Movement Stats")]
     [HideInInspector] public bool isDashing;    //Checks if the player is dashing.
@@ -42,9 +42,6 @@ public class PlatformerScript : MonoBehaviour
     float normalGravityScale;   //Important for smoothing out dashing.
 
     public UnityEvent OnLanding;    //This creates a unity event that can play particles if the player has landed on the floor.
-
-    Keyboard keyboard;
-    Gamepad gamepad;
     
     private void Start()
     {
@@ -54,6 +51,7 @@ public class PlatformerScript : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
         main = Camera.main;
         playerSprite = GetComponentInChildren<SpriteRenderer>();
+        Debug.Log(playerSprite.name);
 
         Debug.Log(playerInput.currentControlScheme);
     }
